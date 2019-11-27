@@ -32,11 +32,16 @@ public class ProducerDemo {
 
         for (int i = 0; i < 10; i++) {
             //fill data in producerRecord
-            producerRecord = new ProducerRecord<>("first_topic", "hello kafka from API " + i);
+            String topic = "first_topic";
+            String value = "hello kafka from API " + i;
+            String key = "id_" + i%3;
+            producerRecord = new ProducerRecord<>(topic, key, value);
             //send data
             kafkaProducer.send(producerRecord, ((recordMetadata, exception) -> {
                 // executes every time a record is successfully sent or an exception is thrown
                 if (exception == null) {
+                    //key details
+                    logger.info("key: " + key);
                     // the record was successfully sent
                     logger.info("Received new metadata. \n" +
                             "Topic:" + recordMetadata.topic() + "\n" +
