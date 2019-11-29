@@ -101,6 +101,11 @@ public class TwitterProducer {
         //It includes: acks = all, retries = max, inflight_reg_per_connection = 5
         properties.setProperty(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, "true");
 
+        //activate batch sending (slightly increase cpu usage and latency)
+        properties.setProperty(ProducerConfig.COMPRESSION_TYPE_CONFIG, "snappy");
+        properties.setProperty(ProducerConfig.LINGER_MS_CONFIG, "20");
+        properties.setProperty(ProducerConfig.BATCH_SIZE_CONFIG, "32*1024");  //32 KB
+
         //create producer
         return new KafkaProducer<>(properties);
 
